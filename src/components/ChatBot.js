@@ -22,12 +22,14 @@ const ChatBot = () => {
         setInput('');
 
         try {
-            const response = await fetch('/api/ai/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: input })
+            const response = await fetch('http://localhost:8080/api/ai/chat', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') // JWT token
+            },
+            body: JSON.stringify({ message: input })
             });
-
             if (!response.ok) {
                 throw new Error('API yanıtı başarısız oldu.');
             }
