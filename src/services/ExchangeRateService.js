@@ -1,4 +1,3 @@
-// ExchangeRateService.js - Tüm dosyayı bu şekilde güncelleyin
 class ExchangeRateService {
     constructor() {
         this.socket = null;

@@ -27,4 +27,13 @@ export const transactionAPI = {
       },
     });
   },
+  getTransactionsSummaryByDateRangeAndType: (startDate, endDate, type) => {
+    return api.get(`/transactions/reports/summary/type`, {
+      params: {
+        startDate: startDate,
+        endDate: endDate,
+        type: type,
+      },
+    });
+  },
 };

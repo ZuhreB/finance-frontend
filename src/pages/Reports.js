@@ -252,41 +252,34 @@ const Reports = () => {
           )}
 
           {/* Yatırım Kar/Zarar Raporu */}
-          {profitLossData && hasInvestmentData && (
+          {profitLossData && profitLossData.profitLossByAsset && Object.keys(profitLossData.profitLossByAsset).length > 0 && (
             <div className="investment-report">
-              <h3>📈 Yatırım Kar/Zarar Raporu</h3>
-              <div className="investment-list">
-                <div className={`investment-item ${profitLossData.totalProfitLoss > 0 ? 'investment-positive' : 'investment-negative'}`}>
-                  <span>Toplam Kar/Zarar</span>
-                  <span className={profitLossData.totalProfitLoss > 0 ? 'amount-positive' : 'amount-negative'}>
-                    {formatCurrency(profitLossData.totalProfitLoss)}
-                  </span>
-                </div>
-                {Object.keys(combinedProfitLoss).map((investmentType, index) => (
-                  <div key={index} className={`investment-item ${combinedProfitLoss[investmentType] > 0 ? 'investment-positive' : 'investment-negative'}`}>
-                    <span>{investmentType}</span>
-                    <span className={combinedProfitLoss[investmentType] > 0 ? 'amount-positive' : 'amount-negative'}>
-                      {formatCurrency(combinedProfitLoss[investmentType])}
+              <h3>📈 Yatırım Kar/Zarar Raporu (Mevcut Piyasa)</h3>
+                <div className="investment-list">
+                  <div className={`investment-item ${profitLossData.totalProfitLoss > 0 ? 'investment-positive' : 'investment-negative'}`}>
+                    <span>Toplam Kar/Zarar</span>
+                    <span className={profitLossData.totalProfitLoss > 0 ? 'amount-positive' : 'amount-negative'}>
+                        {formatCurrency(profitLossData.totalProfitLoss)}
                     </span>
+                  </div>
+                    {Object.entries(profitLossData.profitLossByAsset).map(([asset, profitLoss], index) => (
+                      <div key={index} className={`investment-item ${profitLoss > 0 ? 'investment-positive' : 'investment-negative'}`}>
+                        <span>{asset}</span>
+                          <div className="investment-details">
+                        <span>Miktar: {profitLossData.currentHoldings[asset]}</span>
+                    <span>Güncel Fiyat: {formatCurrency(profitLossData.currentRates[asset])}</span>
+                      <span>Toplam Yatırım: {formatCurrency(profitLossData.totalInvestmentByAsset[asset])}</span>
+                        <span className={profitLoss > 0 ? 'amount-positive' : 'amount-negative'}>
+                          {formatCurrency(profitLoss)}
+                        </span>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Yatırım verisi yoksa mesaj göster */}
-          {profitLossData && !hasInvestmentData && (
-            <div className="empty-state">
-              <p>Seçilen dönemde yatırım kar/zarar verisi bulunamadı.</p>
-            </div>
-          )}
-
-          {/* Seçilen türe göre mesaj */}
-          {filters.type !== 'ALL' && categoryData.length === 0 && (
-            <div className="empty-state">
-              <p>Seçilen dönemde {filters.type === 'INCOME' ? 'gelir' : 'gider'} kaydı bulunamadı.</p>
-            </div>
-          )}
+          
         </div>
       )}
     </div>

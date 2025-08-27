@@ -246,6 +246,17 @@
 .investment-negative {
     border-left-color: #ef4444;
 }
+.investment-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.investment-details span {
+    display: block;
+}
 
 /* Boş Durum Mesajları */
 .empty-state {

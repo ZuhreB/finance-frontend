@@ -10,11 +10,27 @@ h1, h2, h3 {
   color: #333;
 }
 
+/* Ana içerik düzeni: Sol tarafta form, sağ tarafta özetler ve işlemler */
 .content-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr; /* Form daha geniş, sağ kısım daha dar */
   gap: 2rem;
 }
+
+/* Sağdaki paneli (bakiye, özet, işlemler) dikey olarak düzenler */
+.right-panel-grid {
+  display: grid;
+  grid-template-rows: auto 1fr; /* Üstte bakiye/özet, altta işlemler ve kalan alanı kaplar */
+  gap: 2rem;
+}
+
+/* Bakiye ve Aylık Özet kutularını yatayda yan yana hizalar */
+.balance-summary-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* İki eşit sütun */
+  gap: 2rem;
+}
+
 
 /* Kutu ve Kart Stilleri */
 .form-container,
@@ -27,10 +43,6 @@ h1, h2, h3 {
 }
 
 /* Bakiye Kutusu */
-.balance-box {
-  margin-bottom: 2rem;
-}
-
 .positive-balance {
   font-size: 2rem;
   font-weight: bold;
@@ -62,6 +74,18 @@ h1, h2, h3 {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box; /* padding'i genişliğe dahil eder */
+}
+
+/* Form alanlarını yan yana getiren yeni sınıf */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1; /* İçindeki elemanların eşit yer kaplamasını sağlar */
+  margin-bottom: 0; /* Alt boşluğu kaldırır, form-row gap'i kullanılır */
 }
 
 /* Buton Stilleri */
@@ -96,17 +120,27 @@ h1, h2, h3 {
   border: 1px solid #f5c6cb;
 }
 
+/* Aylık Özet Başlıkları (tıklanabilir) */
+.balance-box h4 {
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.balance-box h4:hover {
+  color: #007bff;
+}
+
 /* İşlem Listesi */
 .transactions-scroll-list {
-  max-height: 400px;
-  overflow-y: auto;
+  max-height: 400px; /* Belirli bir yükseklik sınırı */
+  overflow-y: auto; /* Dikey kaydırma çubuğu */
 }
 
 .transaction-item {
   padding: 0.75rem;
   border-bottom: 1px solid #eee;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Küçük ekranlarda alta geçebilir */
   align-items: center;
   gap: 0.5rem;
 }
@@ -137,8 +171,22 @@ h1, h2, h3 {
 }
 
 /* Responsive Tasarım */
-@media (max-width: 768px) {
+@media (max-width: 992px) { /* Tablet boyutları için */
   .content-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Tek sütuna düşür */
+  }
+
+  .right-panel-grid {
+    grid-template-rows: auto auto; /* Özetler ve işlemler alt alta */
+  }
+
+  .balance-summary-group {
+    grid-template-columns: 1fr; /* Bakiye ve özet de alt alta */
+  }
+}
+
+@media (max-width: 768px) { /* Telefon boyutları için */
+  .transactions-page {
+    padding: 1rem;
   }
 }

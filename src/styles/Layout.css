@@ -13,7 +13,7 @@
 .header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 1rem 0;
+  padding: 0.75rem 0; /* Boşluğu 1rem'den 0.75rem'e düşürdük */
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
@@ -32,7 +32,7 @@
 
 .nav {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
 }
 
@@ -72,8 +72,9 @@
   background-color: #343a40;
   color: white;
   text-align: center;
-  padding: 1rem 0;
+  padding: 0.20rem 0;
   margin-top: auto;
+  font-size: 0.7rem;
 }
 
 /* Form Stilleri */
