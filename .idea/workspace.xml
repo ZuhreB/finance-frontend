@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="666dfefa-1109-4804-b364-64f5b087ee03" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/pages/Reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Reports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Transactions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Transactions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/transactionAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/transactionAPI.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/Layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/Layout.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/Reports.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/Reports.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/Transactions.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/Transactions.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LiveExchangeRates.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LiveExchangeRates.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/ExchangeRateService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/ExchangeRateService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/LiveExchangeRates.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/LiveExchangeRates.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,22 +18,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "ZuhreB"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ZuhreB&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/ZuhreB/finance-frontend.git",
-    "accountId": "b79e637e-1b23-435d-a989-1b14d7107cf8"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ZuhreB/finance-frontend.git&quot;,
+    &quot;accountId&quot;: &quot;b79e637e-1b23-435d-a989-1b14d7107cf8&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 8
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="31rV2kAoaqiqeYS2EBKhP0ljqLc" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -46,7 +44,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true"
+    "kotlin-language-version-configured": "true",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

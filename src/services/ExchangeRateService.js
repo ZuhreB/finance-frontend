@@ -5,16 +5,17 @@ class ExchangeRateService {
         this.onConnectionChange = null;
         this.reconnectInterval = null;
         this.isConnecting = false;
+        this.onNotification = null;
     }
 
-    connect(onRatesUpdate, onConnectionChange) {
+    connect(onRatesUpdate, onConnectionChange, onNotification) {
         // Eğer zaten bağlanıyorsak çık
         if (this.isConnecting) return;
         
         this.onRatesUpdate = onRatesUpdate;
         this.onConnectionChange = onConnectionChange;
         this.isConnecting = true;
-        
+        this.onNotification=onNotification;
         console.log('WebSocket bağlantısı kuruluyor...');
         
         // Önceki bağlantıyı temizle
@@ -42,16 +43,16 @@ class ExchangeRateService {
             
             this.socket.onmessage = (event) => {
                 try {
-                    console.log('WebSocket mesajı alındı:', event.data);
-                    
-                    const rates = JSON.parse(event.data);
-                    console.log('Parsed döviz verileri:', rates);
-                    
-                    if (this.onRatesUpdate && rates && typeof rates === 'object') {
-                        this.onRatesUpdate(rates);
+                    const data = JSON.parse(event.data);
+                    // Eğer gelen veri tek bir eleman içeriyorsa, bu bir bildirimdir.
+                    // Yoksa, tüm kurların güncellenmesidir.
+                    if (Object.keys(data).length === 1 && this.onNotification) {
+                        this.onNotification(data);
+                    } else if (this.onRatesUpdate) {
+                        this.onRatesUpdate(data);
                     }
-                } catch (error) {
-                    console.error('WebSocket mesaj işleme hatası:', error, 'Ham veri:', event.data);
+                } catch (e) {
+                    console.error('Mesaj parse edilirken hata:', e);
                 }
             };
             

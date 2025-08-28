@@ -108,3 +108,87 @@
     margin: 0;
     color: #92400e;
 }
+.ratesItem {
+    display: flex;
+    justify-content: space-between; /* İçeriği ve butonu ayırır */
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.ratesItem:hover {
+    transform: translateY(-2px);
+}
+
+.rate-content {
+    flex-grow: 1; /* İçeriğin genişlemesini sağlar */
+}
+
+/* Abonelik butonu stilleri */
+.subscribe-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.subscribe-btn:hover {
+    background-color: #0056b3;
+}
+
+.subscribe-btn.subscribed {
+    background-color: #28a745;
+}
+
+.subscribe-btn.subscribed:hover {
+    background-color: #218838;
+}
+
+/* Bildirim kutusu stilleri */
+.notificationBox {
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #e9f5ff;
+    border: 1px solid #cce5ff;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+.notificationBox h3 {
+    margin-top: 0;
+    color: #0056b3;
+    border-bottom: 1px solid #cce5ff;
+    padding-bottom: 5px;
+}
+
+.notificationBox ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.notificationItem {
+    padding: 8px 0;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px dotted #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notificationItem:last-child {
+    border-bottom: none;
+}
+
+.notificationTime {
+    font-size: 12px;
+    color: #666;
+    margin-left: 10px;
+}
