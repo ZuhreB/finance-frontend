@@ -1,19 +1,35 @@
 import api from './api';
 
+const getToken = () => {
+    return localStorage.getItem('token');
+};
+
 export const subscriptionAPI = {
     // Bir kur çifti için abonelik ekler
     addSubscription: (currencyPair) => {
-        return api.post('/subscriptions', { currencyPair });
+        const token = getToken();
+        if (!token) {
+            console.error('Token bulunamadı. Lütfen giriş yapın.');
+            return Promise.reject('Token bulunamadı.');
+        }
+        return api.post('/subscriptions', { currencyPair }, {
+            headers: {
+                Authorization: `Bearer ${token}` // <-- JWT token'ı buraya ekledik
+            }
+        });
     },
 
     // Bir kur çifti için aboneliği kaldırır
     removeSubscription: (currencyPair) => {
-        return api.delete(`/subscriptions/${currencyPair}`);
+        const token = getToken();
+        if (!token) {
+            console.error('Token bulunamadı. Lütfen giriş yapın.');
+            return Promise.reject('Token bulunamadı.');
+        }
+        return api.delete(`/subscriptions/${currencyPair}`, {
+            headers: {
+                Authorization: `Bearer ${token}` // <-- JWT token'ı buraya da ekledik
+            }
+        });
     },
-
-    // Kullanıcının mevcut aboneliklerini getirir (Eğer backend'de bir GET endpoint'iniz varsa kullanabilirsiniz)
-    // Şimdilik UI'da durumu yerel olarak takip edeceğiz.
-    // getSubscriptions: () => {
-    //     return api.get('/subscriptions/my');
-    // },
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ExchangeRateService from '../services/ExchangeRateService';
 import ChatBot from './ChatBot';
 import { subscriptionAPI } from '../services/subscriptionAPI'; // Yeni: API servisini import et
@@ -8,48 +8,51 @@ const LiveExchangeRates = () => {
     const [rates, setRates] = useState({});
     const [isConnected, setIsConnected] = useState(false);
     const [lastUpdated, setLastUpdated] = useState(null);
-    const [notifications, setNotifications] = useState([]); // Yeni: Bildirimleri saklayacak state
-    const [subscribedPairs, setSubscribedPairs] = useState([]); // Yeni: Takip edilen kurları saklayacak state
+    const [notifications, setNotifications] = useState([]);
+    const [subscribedPairs, setSubscribedPairs] = useState([]);
+    
+    // Bağlantının durumunu takip etmek için useRef kullanın.
+    const hasConnected = useRef(false);
 
     useEffect(() => {
-        let isMounted = true;
+        // Strict Mode'da çift çağrıyı önlemek için bir bayrak kullanın.
+        if (hasConnected.current) {
+            return;
+        }
+        hasConnected.current = true;
 
+        const token = localStorage.getItem('token');
+        console.log('Current token:', token);
+        
         const handleRatesUpdate = (newRates) => {
-            if (isMounted) {
-                console.log('Gelen döviz ve altın verileri:', newRates);
-                setRates(newRates);
-                setLastUpdated(new Date());
-            }
+            console.log('Gelen döviz ve altın verileri:', newRates);
+            setRates(newRates);
+            setLastUpdated(new Date());
         };
 
         const handleConnectionChange = (connected) => {
-            if (isMounted) {
-                console.log('Bağlantı durumu değişti:', connected);
-                setIsConnected(connected);
-            }
+            console.log('Bağlantı durumu değişti:', connected);
+            setIsConnected(connected);
         };
         
-        // Yeni: Tekil kur değişim bildirimlerini ele alacak fonksiyon
         const handleNotification = (notificationData) => {
-            if (isMounted) {
-                const [pair, rate] = Object.entries(notificationData)[0];
-                const message = `${pair} kuru güncellendi: Yeni fiyat ${rate} ₺`;
-                console.log('Yeni bildirim:', message);
-                setNotifications(prevNotifications => [
-                    { id: Date.now(), message: message, timestamp: new Date() },
-                    ...prevNotifications
-                ].slice(0, 5)); // En fazla 5 bildirim göster
-            }
+            const [pair, rate] = Object.entries(notificationData)[0];
+            const message = `${pair} kuru güncellendi: Yeni fiyat ${rate} ₺`;
+            console.log('Yeni bildirim:', message);
+            setNotifications(prevNotifications => [
+                { id: Date.now(), message: message, timestamp: new Date() },
+                ...prevNotifications
+            ].slice(0, 5));
         };
 
         console.log('Component mounted, WebSocket bağlantısı kuruluyor...');
-        // Yeni callback'i connect fonksiyonuna gönder
         ExchangeRateService.connect(handleRatesUpdate, handleConnectionChange, handleNotification);
 
         return () => {
             console.log('Component unmounted, WebSocket bağlantısı kapatılıyor...');
-            isMounted = false;
             ExchangeRateService.disconnect();
+            // Bileşen gerçekten unmount edildiğinde ref'i sıfırlayın.
+            hasConnected.current = false;
         };
     }, []);
 
@@ -58,7 +61,6 @@ const LiveExchangeRates = () => {
         ExchangeRateService.requestRates();
     };
 
-    // Yeni: Abonelik durumunu değiştirecek fonksiyon
     const handleSubscribeToggle = async (currencyPair) => {
         try {
             const isSubscribed = subscribedPairs.includes(currencyPair);
@@ -77,9 +79,7 @@ const LiveExchangeRates = () => {
         }
     };
 
-    // Diğer yardımcı fonksiyonlar...
     const formatRate = (pair, rate) => {
-        // ... (mevcut kodunuz)
         if (pair === 'GRAM ALTIN') {
             return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(rate);
         }
@@ -87,7 +87,6 @@ const LiveExchangeRates = () => {
     };
 
     const isMajorPair = (pair) => {
-        // ... (mevcut kodunuz)
         const majorPairs = ['USD/TRY', 'EUR/TRY', 'GBP/TRY'];
         return majorPairs.includes(pair);
     };
@@ -97,7 +96,6 @@ const LiveExchangeRates = () => {
         if (pair === 'GRAM ALTIN') {
             className += ' gold-item';
         }
-        // Eğer kullanıcı bu kura abone ise, butonu farklı renkte gösterelim
         if (subscribedPairs.includes(pair)) {
             className += ' subscribed-item';
         }
@@ -108,7 +106,6 @@ const LiveExchangeRates = () => {
         <div className="liveRatesPage">
             <h1>Canlı Döviz ve Altın Kurları</h1>
             
-            {/* Bağlantı durumu ve son güncelleme zamanı */}
             <div className="statusContainer">
                 <span className={`status ${isConnected ? 'connected' : 'disconnected'}`}>
                     {isConnected ? 'Bağlı' : 'Bağlantı kesik'}
@@ -125,7 +122,6 @@ const LiveExchangeRates = () => {
 
             {Object.keys(rates).length > 0 ? (
                 <>
-                    {/* Yeni: Bildirim Kutusu */}
                     <div className="notificationBox">
                         <h3>Bildirimler</h3>
                         {notifications.length > 0 ? (
@@ -159,7 +155,6 @@ const LiveExchangeRates = () => {
                                         <span className="pair">{pair}</span>
                                         <span className="rate">{formatRate(pair, rate)}</span>
                                     </div>
-                                    {/* Yeni: Abonelik butonu */}
                                     <button
                                         onClick={() => handleSubscribeToggle(pair)}
                                         className={`subscribe-btn ${subscribedPairs.includes(pair) ? 'subscribed' : ''}`}

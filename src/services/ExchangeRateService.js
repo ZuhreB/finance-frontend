@@ -15,72 +15,81 @@ class ExchangeRateService {
         this.onRatesUpdate = onRatesUpdate;
         this.onConnectionChange = onConnectionChange;
         this.isConnecting = true;
-        this.onNotification=onNotification;
+        this.onNotification = onNotification;
         console.log('WebSocket bağlantısı kuruluyor...');
         
         // Önceki bağlantıyı temizle
         this.disconnect();
+        const token = localStorage.getItem('token');
+        let url = 'ws://localhost:8080/ws/exchange-rates';
         
+        // TOKEN'ı query parametresi olarak ekle
+        if (token) {
+            url = `ws://localhost:8080/ws/exchange-rates?token=${token}`;
+            console.log('WebSocket URL with token:', url);
+        } else {
+            console.warn('Token bulunamadı! WebSocket bağlantısı token olmadan kuruluyor.');
+        }
+        
+        // Bağlantıyı tek bir yerde oluştur
+        this.socket = new WebSocket(url);
+
+        this.socket.onopen = () => {
+            console.log('WebSocket bağlantısı kuruldu');
+            this.isConnecting = false;
+            if (this.onConnectionChange) {
+                this.onConnectionChange(true);
+            }
+            
+            // Bağlantı kurulunca ilk veriyi iste
+            this.socket.send('getRates');
+            
+            // Otomatik yeniden bağlanmayı temizle
+            if (this.reconnectInterval) {
+                clearInterval(this.reconnectInterval);
+                this.reconnectInterval = null;
+            }
+        };
+    this.socket.onmessage = (event) => {
         try {
-            this.socket = new WebSocket('ws://localhost:8080/ws/exchange-rates');
+            const message = event.data;
+            // Gelen mesajın JSON formatında olup olmadığını kontrol et
+            const isJson = message.startsWith('{') && message.endsWith('}');
             
-            this.socket.onopen = () => {
-                console.log('WebSocket bağlantısı kuruldu');
-                this.isConnecting = false;
-                if (this.onConnectionChange) {
-                    this.onConnectionChange(true);
+            if (isJson) {
+                // Eğer JSON ise, bu bir kur güncellemesidir
+                const rates = JSON.parse(message);
+                if (this.onRatesUpdate) {
+                    this.onRatesUpdate(rates);
                 }
-                
-                // Bağlantı kurulunca ilk veriyi iste
-                this.socket.send('getRates');
-                
-                // Otomatik yeniden bağlanmayı temizle
-                if (this.reconnectInterval) {
-                    clearInterval(this.reconnectInterval);
-                    this.reconnectInterval = null;
+            } else {
+                // Eğer JSON değilse, bu bir bildirim mesajıdır
+                console.log('Gelen bildirim:', message);
+                if (this.onNotification) {
+                    this.onNotification(message);
                 }
-            };
-            
-            this.socket.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    // Eğer gelen veri tek bir eleman içeriyorsa, bu bir bildirimdir.
-                    // Yoksa, tüm kurların güncellenmesidir.
-                    if (Object.keys(data).length === 1 && this.onNotification) {
-                        this.onNotification(data);
-                    } else if (this.onRatesUpdate) {
-                        this.onRatesUpdate(data);
-                    }
-                } catch (e) {
-                    console.error('Mesaj parse edilirken hata:', e);
-                }
-            };
-            
-            this.socket.onclose = (event) => {
-                console.log('WebSocket bağlantısı kapandı, yeniden bağlanılıyor...', event.code, event.reason);
-                this.isConnecting = false;
-                if (this.onConnectionChange) {
-                    this.onConnectionChange(false);
-                }
-                this.handleReconnect();
-            };
-            
-            this.socket.onerror = (error) => {
-                console.error('WebSocket hatası:', error);
-                this.isConnecting = false;
-                if (this.onConnectionChange) {
-                    this.onConnectionChange(false);
-                }
-            };
-            
-        } catch (error) {
-            console.error('WebSocket bağlantı hatası:', error);
+            }
+        } catch (e) {
+            console.error('Mesaj işlenirken hata oluştu:', e);
+        }
+    };
+        
+        this.socket.onclose = (event) => {
+            console.log('WebSocket bağlantısı kapandı, yeniden bağlanılıyor...', event.code, event.reason);
             this.isConnecting = false;
             if (this.onConnectionChange) {
                 this.onConnectionChange(false);
             }
             this.handleReconnect();
-        }
+        };
+        
+        this.socket.onerror = (error) => {
+            console.error('WebSocket hatası:', error);
+            this.isConnecting = false;
+            if (this.onConnectionChange) {
+                this.onConnectionChange(false);
+            }
+        };
     }
 
     handleReconnect() {
