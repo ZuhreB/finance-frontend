@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; 
 import { authAPI } from '../services/api';
-import '../styles/Login.css'; // CSS dosyasını import edin
+import '../styles/Login.css'; 
 
 const Login = () => {
   console.log('Rendering Login component');
@@ -27,6 +27,7 @@ const Login = () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         navigate('/dashboard');
+        window.location.reload(); // Sayfayı yenile
       } else {
         setError('Login response is missing token or user data');
       }

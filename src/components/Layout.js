@@ -25,7 +25,7 @@ const Layout = ({ isAuthenticated, onLogout }) => {
                 <Link to="/dashboard">Dashboard</Link>
                 <Link to="/transactions">İşlemler</Link>
                 <Link to="/reports">Raporlar</Link>
-                <Link to="/exchange-rates">Döviz Kurları</Link> {/* Yeni link */}
+                <Link to="/exchange-rates">Döviz Kurları</Link> 
                 <button onClick={handleLogout} className="logout-btn">
                   Çıkış Yap
                 </button>

@@ -19,6 +19,9 @@ function App() {
     setIsAuthenticated(!!token && !!user);
   }, []);
 
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -35,7 +38,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="transactions" element={<Transactions />} />
           <Route path="reports" element={<Reports />} /> 
-          <Route path="/exchange-rates" element={<LiveExchangeRates />} />
+          <Route path="exchange-rates" element={<LiveExchangeRates />} />
         </Route>
       </Routes>
     </Router>
