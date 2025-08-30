@@ -21,15 +21,30 @@ export const subscriptionAPI = {
 
     // Bir kur çifti için aboneliği kaldırır
     removeSubscription: (currencyPair) => {
+    const token = getToken();
+    if (!token) {
+        console.error('Token bulunamadı. Lütfen giriş yapın.');
+        return Promise.reject('Token bulunamadı.');
+    }
+    
+    return api.delete(`/subscriptions?currencyPair=${encodeURIComponent(currencyPair)}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+},
+
+    // subscriptionAPI.js'e ekleyin
+    getUserSubscriptions: () => {
         const token = getToken();
         if (!token) {
             console.error('Token bulunamadı. Lütfen giriş yapın.');
             return Promise.reject('Token bulunamadı.');
         }
-        return api.delete(`/subscriptions/${currencyPair}`, {
+        return api.get('/subscriptions', {
             headers: {
-                Authorization: `Bearer ${token}` // <-- JWT token'ı buraya da ekledik
+                Authorization: `Bearer ${token}`
             }
         });
-    },
+    }
 };

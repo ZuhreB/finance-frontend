@@ -20,7 +20,7 @@ const LiveExchangeRates = () => {
             return;
         }
         hasConnected.current = true;
-
+        loadUserSubscriptions();
         const token = localStorage.getItem('token');
         console.log('Current token:', token);
         
@@ -36,14 +36,18 @@ const LiveExchangeRates = () => {
         };
         
         const handleNotification = (notificationData) => {
-            const [pair, rate] = Object.entries(notificationData)[0];
-            const message = `${pair} kuru güncellendi: Yeni fiyat ${rate} ₺`;
-            console.log('Yeni bildirim:', message);
-            setNotifications(prevNotifications => [
-                { id: Date.now(), message: message, timestamp: new Date() },
-                ...prevNotifications
-            ].slice(0, 5));
-        };
+    console.log('Yeni bildirim:', notificationData);
+    
+    // Gelen veri string ise direkt kullan, object ise formatla
+    const message = typeof notificationData === 'string' 
+        ? notificationData 
+        : `${notificationData.currencyPair} kuru güncellendi: Yeni fiyat ${notificationData.rate} ₺`;
+    
+    setNotifications(prevNotifications => [
+        { id: Date.now(), message: message, timestamp: new Date() },
+        ...prevNotifications
+    ].slice(0, 5));
+};
 
         console.log('Component mounted, WebSocket bağlantısı kuruluyor...');
         ExchangeRateService.connect(handleRatesUpdate, handleConnectionChange, handleNotification);
@@ -55,6 +59,16 @@ const LiveExchangeRates = () => {
             hasConnected.current = false;
         };
     }, []);
+
+    const loadUserSubscriptions = async () => {
+        try {
+            const response = await subscriptionAPI.getUserSubscriptions();
+            setSubscribedPairs(response.data);
+            console.log('Kullanıcı abonelikleri:', response.data);
+        } catch (error) {
+            console.error('Abonelikler yüklenemedi:', error);
+        }
+    };
 
     const handleManualRefresh = () => {
         console.log('Manuel güncelleme isteniyor...');

@@ -25,7 +25,7 @@ class ExchangeRateService {
         
         // TOKEN'ı query parametresi olarak ekle
         if (token) {
-            url = `ws://localhost:8080/ws/exchange-rates?token=${token}`;
+            url = `ws://localhost:8080/ws/exchange-rates?token=${encodeURIComponent(token)}`;
             console.log('WebSocket URL with token:', url);
         } else {
             console.warn('Token bulunamadı! WebSocket bağlantısı token olmadan kuruluyor.');
